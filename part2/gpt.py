@@ -213,8 +213,8 @@ class TransformerDecoderBlock(nn.Module):
 
     def forward(self, x):
         # Forward pass through the Decoder Layer
-        out = self.self_attention(self.layer_norm_1(x))
-        out = self.mlpf(self.layer_norm_2(x)) # TODO: is nothing missing?
+        out = self.self_attention(self.layer_norm_1(x)) + x
+        out = self.mlpf(self.layer_norm_2(out)) + out
         return out
 
 
