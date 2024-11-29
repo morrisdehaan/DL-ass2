@@ -156,7 +156,7 @@ class CausalSelfAttention(nn.Module):
 
         if self.use_flash_attn:
             # TODO: is this optimal?
-            y = F.scaled_dot_product_attention(q, k, v, dropout_p=self.config.attn_pdrop, is_causal=True, enable_gqa=True)
+            y = F.scaled_dot_product_attention(q, k, v, dropout_p=self.config.attn_pdrop if self.training else 0.0, is_causal=True, enable_gqa=True)
         else:
             # TODO: doe this work?
             # Compute attention scores
@@ -497,8 +497,7 @@ class GPT(nn.Module):
 
                 # optionally apply top-p sampling
                 if top_p is not None:
-                    sort_idx = torch.argsort(logits, dim=-1, descending=True)
-                    sorted_logits = logits[row_idx, sort_idx] 
+                    sorted_logits, sort_idx = torch.sort(logits, dim=-1, descending=True)
 
                     # selects which logits to use in calculation
                     prob_mask = torch.cumsum(sorted_logits, dim=-1) < top_p

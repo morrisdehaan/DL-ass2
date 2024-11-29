@@ -172,7 +172,7 @@ def train(args):
         cfg.use_flash_attn = args.use_flash_attn
         cfg.compile = args.compile
         cfg.abs_emb = args.abs_emb
-        cfg.model_type = "gpt-micro" # TODO: change back
+        # cfg.model_type = "gpt-micro" # TODO: change back
         cfg.use_flash_attn = True # TODO: change back
         gpt_model = GPT(config=cfg)
 
